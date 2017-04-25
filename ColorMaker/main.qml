@@ -1,8 +1,8 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.2
 
-//[1/3]
-import an.qt.ColorMaker 1.0
+//[1/2]
+//import an.qt.ColorMaker 1.0
 //
 
 Rectangle {
@@ -17,11 +17,11 @@ Rectangle {
         font.pixelSize: 26;
     }
 
-    // [2/3]
-    ColorMaker {
+    // [2/2]
+    /*ColorMaker {
         id: colorMaker;
         color: "green";
-    }
+    }*/
     //
 
     Rectangle {

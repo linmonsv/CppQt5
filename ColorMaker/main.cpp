@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    /*QQuickView viewer;
+    QQuickView viewer;
 
     QObject::connect(viewer.engine(), SIGNAL(quit()), &app, SLOT(quit()));
 
@@ -16,16 +16,16 @@ int main(int argc, char *argv[])
     viewer.rootContext()->setContextProperty("colorMaker", new ColorMaker);
 
     viewer.setSource(QUrl("qrc:/main.qml"));
-    viewer.show();*/
+    viewer.show();
 
-    qmlRegisterType<ColorMaker>("an.qt.ColorMaker", 1, 0, "ColorMaker");
+    /*qmlRegisterType<ColorMaker>("an.qt.ColorMaker", 1, 0, "ColorMaker");
     QQuickView viewer;
 
     QObject::connect(viewer.engine(), SIGNAL(quit()), &app, SLOT(quit()));
 
     viewer.setResizeMode(QQuickView::SizeRootObjectToView);
     viewer.setSource(QUrl("qrc:/main.qml"));
-    viewer.show();
+    viewer.show();*/
 
     return app.exec();
 }
