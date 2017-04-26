@@ -19,7 +19,7 @@ Rectangle {
     Timer {
         property int cout: 0
         id: coutTimer
-        interval: 1000
+        interval: 5000
         repeat: true
         triggeredOnStart: true
         onTriggered: {
@@ -52,7 +52,15 @@ Rectangle {
                 verticalAlignment: Text. AlignVCenter;
                 horizontalAlignment: Text. AlignHCenter;
                 text: modelData;
+
+                Behavior on bkColor {
+
+                    ColorAnimation {
+                        duration: 2500
+                    }
+                }
             }
+
         }
     }
 
