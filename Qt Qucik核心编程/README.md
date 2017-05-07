@@ -214,6 +214,105 @@ FileDialog的实现是平台相关的，如果没有可用的原生文件对话�
 如果失败，则使用默认的QML文件对话框
 
 # 第5章 ECMAScript初探
+
+一个完整的JavaScript实现包含三个不同的部分：
+
+* 核心（ECMAScript）
+* 文档对象模型（DOM）
+* 浏览器对象模式（BOM）
+
+在Qt的帮助文档中有时并不严格区分ECMAScript与JavaScript，但其实两者是不同的
+
+一种全新的编程语言，QML有三个核心：
+
+* ECMAScript
+* Qt对象系统
+* Qt Quick标准库
+
+qmlscene加载下面的QML文档来测试
+
+## 5.1 语法
+
+需要注意的是，QML引入的信号，是有安全类型检测的，在定义信号时，可以使用特定的类型来定义参数
+
+ECMAScript则允许开发者自行决定是否以分号结束一行代码
+
+ECMAScript借用了C、Java等语言的注释语法，支持两种类型的注释---单行注释和多行注释
+
+## 5.2 变量
+
+一个var语句定义的多个变量可以有不同的类型
+
+也可以使用一个变量存储不同类型的值
+
+对于变量（包括函数名），以小写字母开始，单词之间采用驼峰命名法。对于类名，以大写字母开始，单词之间采用驼峰命名法
+
+在ECMAScript中，变量可以存放两种类型的值，即原始值和引用值
+
+原始值一般就地存放在栈上，引用值是一个指针，指向存储在堆中的对象
+
+## 5.3 原始类型
+
+5种原始类型：Undefined、Null、Boolean、Number和String
+
+typeof运算符来判断一个值的类型，，，如果这个值是引用值，那么typeof统一返回“object”作为类型名字
+
+### 5.3.2 Undefined类型
+
+当声明的变量未初始化时，该变量的默认值就是undefined
+
+用于动态加载组件的Loader元素，当要卸载一个组件时，就需要为其sourceComponent属性赋值undefined
+
+## 5.3.5 Number类型
+
+当计算生成的数值大于Number.MAX_VALUE时，它将被赋值为Number.POSITIVE_INFINITY，即正无穷大
+
+Number.NEGATIVE_INFINITY，即负无穷大
+
+还有一个特殊值是NaN，表示非数。通常在类型转换时可那产生NaN
+
+NaN：它不等于自己，因此要判断一个数是否是非数，推荐使用isNaN()方法
+
+### 5.3.6 String类型
+
+在ECMAScript中没有字符类型
+
+String类型的变量是只读的，一旦赋值之后，该变量的值将不可修改
+
+## 5.4 类型转换
+
+### 5.4.1 转换成字符串
+
+Number类型的toString()方法还可以按基转换
+
+### 5.4.2 转换成数字
+
+parseInt()和parseFloat()可以把非数字的原始值转换成数字，，，这两个方法只能用于String类型
+
+parseInt()和parseFloat()会扫描字符串，直到遇到第一个非数字字符时停止，将转换的结果返回
+
+parseInt()还支持基模式
+
+### 5.4.3 强制类型转换
+
+ECMAScript也支持强制类型转换，有三种转换
+
+* Boolean(value)
+* Number(value)
+* String(value)
+
+Number()转换的是整个值，，，返回NaN
+
+对可转换为数字的字符串，Number()会自己决定调用parseInt还是parseFloat()
+
+String可以把任何值转换为字符串，它与调用toString()方法的唯一不同在于：
+
+对null或undefined值强制类型转换可以生成字符串而不引发错误
+
+## 5.5 对象
+
+
+
 # 第6章 Qt Quick事件处理
 # 第7章 组件与动态对象
 # 第8章 Qt Quick元素布局
