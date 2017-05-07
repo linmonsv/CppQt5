@@ -311,9 +311,249 @@ String可以把任何值转换为字符串，它与调用toString()方法的唯�
 
 ## 5.5 对象
 
+在语法上与C++类似，如果类的构造函数的没有参数，括号可以省略
 
+### 5.5.1 Object
+
+Object类是所有ECMAScript类的基类
+
+ECMAScript允许在运行时改变对象原型
+
+valueOf，返回最适合该对象的原始值。对于许多类，该方法返回的值都与toString()一样
+
+在ECMAScript中，对象的属性可以动态的增删
+
+多数自定义属性和方法都是可以枚举的
+
+### 5.5.2 String
+
+charAt()方法可以访问指定索引位置的字符，，，而charCodeAt()方法返回指定位置字符对应的Unicode编码
+
+大于（>）、小于（<）、等于（==）三个运算符可用于字符串比较，但它们使用字符的Unicode编码进行比较，
+
+忽略了与本地语言环境相关的语义和排序规则，有时可能不是你想要的效果
+
+localeCompare()方法在比较字符串时，默认采用底层操作系统提供的排序规则
+
+使用“+”运算符可以更方便地连接字符串，效果和concat()一样
+
+如果你想连接多个字符串并且指定它们之间的分隔符（填充字符），则可以使用Array对象存储字符串，
+
+然后调用Array的join()方法
+
+slice()遇到负数参数时，会应用“从串尾倒数”这种策略，，，
+
+而substring()方法会把负数参数作为0处理，还有一点，substring()总是把较小的参数作为起始位置
+
+大小写转换：
+
+toLowerCase()或toLocalLowerCase;toUpperCase()或toLOcalUpperCase()方法
+
+其中toLocalXXX方法基于特定的区域实现，与localeCompare()类似
+
+字串查找时我们用到了正则表达式
+
+QML在实现ECMAScript时对String对象做了扩充，加入了arg()方法
+
+### 5.5.3 RegExp
+
+在ECMAScript中支持两种构造正则表达式的方法：
+
+* 字面量语法：/pattern/attributes
+* 创建RegExp对象：new RegExp(pattern, attributes)
+
+在“/String/i"中，i是修饰符，表示忽略大小写，这个正则表达式的意思就是匹配String这个单词，不管大小写
+
+RegExp("String", "i");或者这么构建：new RegExp("String", "i")
+
+QML中可以使用的修饰符有三个：
+
+* "i",匹配时忽略大小写
+* "g",查找所有匹配而非在找到第一个匹配后停止，即全局匹配
+* "m",执行多行匹配
+
+先解释下“\d+”这个模式。\d是元字符，表示查找数字。+是量词，表示重复一次或多次
+
+### 5.5.4 Array
+
+ECMAScript定义的Array是动态数组，其大小可以动态变化。而且数组中的元素，类型可以不同
+
+push()方法向数组末尾插入一个或多个元素，它返回数组新的长度。
+
+pop()方法删除并返回数组的最后一个元素
+
+shift()方法删除并返回数组的第一个元素。unshift()方法向数组的开始添加一个元素并返回新的数组长度
+
+reverse()方法可以颠倒数组中元素的顺序。注意，它会改变原来的数组
+
+sort()，，，有一个可选的参数sortby,让你指定一个比较大小的函数
+
+join方法可以把数组中的所有元素组合成一个字符串，字符串之间可以用给定的分隔符来填充
+
+splice(index, howmnay, item1,......,itemN)方法，，，：删除从index开始的howmany个元素，
+
+将item1到itemN插入到数组中，如果删除了元素，splice()会返回被删除元素组成的数组。注意，它会改变原有数组
+
+### 5.5.6 Date
+
+当使用无参构造函数创建Date()对象时，该对象会自动把当前日期和时间保存为其初始值
+
+下列方法可以从Date对象中提取信息，，，
+
+Date.now()，，，计算耗时
+
+QML对ECMAScript定义的对象做了扩展，提供了下列与locale相关的方法，方便日期转换
+
+name由语言代码和国家编码组成。
+
+语言代码是两位小写字母（如zh表示汉语），由ISO 639标准定义
+
+国家编码是两位大写字母（如CN表示中国），由ISO 3166标准定义
+
+### 5.5.7 ，，，
+
+ECMAScript有垃圾收集器（GC，Garbage Collection）
+
+## 5.6 函数
+
+ECMAScript不支持函数重载
+
+即便没有显式使用return语句，它也会返回undefined
+
+## 5.7 表达式和运算符
+
+### 5.7.4 比较和逻辑运算符
+
+=== 全等（值和类型）
+
+比较运算符多数都可用于字符串，比较时基于字符串的Unicode编码，注意，这可能不是你想要的结果
+
+### 5.7.5 条件运算符
+
+？：是ECMAScript中唯一的三元运算符
+
+### 5.7.6 位运算符
+
+，，，
+
+### 5.7.7 关键字运算符
+
+void运算符比较特殊，它放在一个表达式前，舍弃表达式的值，返回undefined
+
+instanceof用来测试一个对象的实际类型，你需要显示指定要测试的类型
+
+delete运算符比较特别，，，它用于删除运算数所指定的对象的属性，而不能直接删除一个对象。
+
+在QML中，一般它只能删除一个对象内由你定义的属性，而框架定义的那些核心属性，多数是你不能删除的
+
+使用var运算符定义的变量，也不能直接delete
+
+调用delete，多数时候是解除对对象的引用
+
+### 5.7.8 逗号运算符
+
+逗号运算符经常和for语句结合使用
+
+### 5.7.9 数组和对象存取运算符
+
+在ECMAScript中，如果你使用对象存取运算符访问某个对象的一个不存在的属性，不会报错，会返回undefined
+
+## 5.9 使用console
+
+console提供了输出日志信息、断言、计时器、计数器、性能分析等功能
+
+### 5.9.1 输出日志信息
+
+console.log()来输出其调试信息
+
+### 5.9.2 断言
+
+console.assert()提供断言功能，它接受一个表达式，当表达式的值为false时会输出调试信息，打印QML所在行
+
+需要注意的是，在QML中，使用console.assert()，断言失败，程序并不会终止运行
+
+### 5.9.3 计时器
+
+console提供了计时器功能，方便我们测量某些代码的耗时情况
+
+console.time(tag)启动定时器，字符串类型的tag是必需的
+
+console.timeEnd(tag)停止计时器，在控制台输出某个标签对应的耗时信息。tag是必需的
+
+## 5.10 内置对象
+
+### 5.10.1 Global对象
+
+ECMAScript，，，：没有独立的函数和属性，所有的属性和函数都从属于某个对象。
+
+因此，Global对象应运而生，接管了那些，，，
+
+URI编解码
+
+encodeURL()方法用于处理完整的URI
+
+encodeURIComponent()则对它发现的所有非标准字符进行编码
+
+eval()方法，它用来执行一段ECMAScript。
+
+eval()的参数是字符串，并且只能是原始字符串，如果你传递一个String对象给它，它会原封不动地返回你
+
+### 5.10.2 JSON对象
+
+RFC4627描述了JSON数据的交换格式
+
+parse()用于解析JSON文本，生成ECMAScript对象
+
+可选参数reviver是一个接受两个参数的函数（key和value），用于过滤和转换结果
+
+stringify()可以将ECMAScript对象转换为JSON格式的字符串，即对象的字面量
+
+如果value对象有toJSON方法，则stringify()会优先使用它来字符串化对象
+
+## 5.11 来自QML的基本类型
+
+当你使用它们来定义变量时，只能用于QML提供的宿主对象的属性定义或信号参数定义，
+
+不能在ECMAScript脚本中直接使用它们定义变量，也不能使用它们在QML文档内嵌的ECMAScript函数、代码块内定义局部变量
+
+### 5.11.1 url
+
+如果你访问的资源、路径或URI中有非有效字符，，，encodeURL，，，
+
+### 5.11.2 list
+
+list对象只能存储对象，不能存原始值，不过你可以使用var代替原始值
+
+### 5.11.4 font
+
+屏幕尺寸和像素密度多种多样，建议使用pointSize
+
+## 5.12 宿主对象Qt
+
+Qt是Qml提供的一个全局宿主对象，整合了常用的属性、方法和枚举类型，方便开发者引用
+
+### 5.12.1 Qt对象的属性
+
+application.platform是一个对象，platform.os存储操作系统的名字
+
+* "android"
+* "ios"
+* "linux"
+* "osx"
+* "windows"
+，，，
+
+### 5.12.3 Qt对象的方法
+
+var today = new Date();
+console.log(Qt.formatDateTime(today, "yyyy-MM-dd hh:mm:ss.zzz"));
 
 # 第6章 Qt Quick事件处理
+
+每一种用户可那使用的与计算机或手机交互的方式，在Qt Quick中都体现为事件---
+
+MouseEvent、KeyEvent、GestureEvent、PinchEvent，，，
+
 # 第7章 组件与动态对象
 # 第8章 Qt Quick元素布局
 # 第9章 Qt Quick常用元素介绍
