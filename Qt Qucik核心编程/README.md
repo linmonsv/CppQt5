@@ -776,6 +776,59 @@ createQmlObject，，，第三个参数用于给新创建的对象关联一个�
 QML引擎会在当前代码块执行结束后的某个合适的时刻删除它们。所以，即便你在一个对象内部调用destroy()方法也是安全的。
 
 # 第8章 Qt Quick元素布局
+
+有两套与元素布局相关的类库，一套叫做Item Positioner（定位器），一套叫做Item Layout（布局）
+
+还有个锚布局，它通过Item的anchors属性实现
+
+## 8.1 定位器
+
+定位器不会改变它管理的元素的大小
+
+### 8.1.1 Row
+
+在一个Row内的Item，可以使用Positioner附加属性来获知自己在Row中的详细信息。
+
+Positioner有index、isFirstItem、isLastItem三个属性
+
+Row还有，，，populate，，，Transition类型的属性，，，定位器初始化创建items三种场景的过度动画
+
+### 8.1.2 Colomun
+
+### 8.1.3 Grid
+
+你可以通过rows和columns属性设定表格的行、列数。
+
+如果不设置，默认只有4列，而行数则会根据实际的Item数量自动计算。
+
+rowSpacing和columnsSpacing指定行、列间距，单位是像素
+
+### 8.1.4 Flow
+
+Flow其实和Grid类似，不同之处是它没有显式的行、列数，它会计算子item的尺寸，然后与自身尺寸比较，按需折行
+
+### 8.1.5 定位器嵌套
+
+Qt Quick的定位器元素是可以嵌套的
+
+## 8.2 布局管理器
+
+### 8.2.1 GridLayout
+
+width:300 设置，，，宽度，，，
+
+Layout.columnSpacn: 3 ，，，设置，，，三行三列（单元格合并），，，
+
+Layout.fillWidth: true ，，，设置，，，填充，，，所有可用宽度
+
+### 8.2.2 RowLayout
+
+Layout.fillWidth，，，
+
+### 8.2.3 ColumnLayout
+
+## 8.3 其他的布局方式
+
 # 第9章 Qt Quick常用元素介绍
 # 第10章 Canvas（画布）
 # 第11章 C++与QML混合编程
