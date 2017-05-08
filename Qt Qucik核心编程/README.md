@@ -830,6 +830,111 @@ Layout.fillWidth，，，
 ## 8.3 其他的布局方式
 
 # 第9章 Qt Quick常用元素介绍
+
+## 9.1 行编辑（TextInput与TextField）
+
+### 9.1.1 TextInput
+
+TextInput不支持使用HTML标记的富文本
+
+length属性返回编辑框内的字符个数，使用它比通过text属性取得文本再调用String对象的length方法效率要高很多。
+
+maximumlength设置，，，超过这个长度会被截断
+
+TextInput的cursor就是光标，可以通过cursorDelegate来定制它的外观
+
+displayText属性就保存显示给用户的文本，而text属性则保存实际输入的文本
+
+当用户按了回车键或确认键，或者编辑框失去焦点时，会发出accepted和editingFinished信号，开发者可以实现onAccepted和onEditingFinished信号处理器来处理
+
+### 9.1.2 TextField
+
+TextInput没有背景，是透明的，能够与父控件无缝结合。而TextField有背景，其背景色可通过TextFieldStyle的（Component类型的）background属性来设定
+
+## 9.2 文本快（TextEdit与TextArea）
+
+TextArea支持文本滚动
+
+## 9.3 ExclusiveGroup
+
+ExclusiveGroup（互斥分组）本身是不可见元素，用于将若干个可选择元素组合在一起供用户选择其中的一个选项
+
+也可以定义一个只设置了id属性的ExclusiveGroup对象
+
+## 9.4 RadioButton
+
+RadioButton用于多选一的场景，使用时需要通过exclusiveGroup属性为其指定一个分组
+
+### 9.4.1 RadioButtonStyle
+
+RadioButtonStyle用来定制一个RadioButton
+
+### 9.4.2 ，，，
+
+QML文件内嵌入了一个RadioButtonStyle组件，将选中图标变成了椭圆形，将选中时的文字变成了蓝色
+
+## 9.5 CheckBox
+
+部分选中状态，举个例子，比如一个选项下面又有几个子选项，当子选项中的部分选项被选中时，父选项的选中狂的状态就是部分选中
+
+如果你指定了exclusiveGroup属性，那么同属于一个互斥组的复选框，也可以达到多选一的效果
+
+## 9.6 GroupBox
+
+GroupBox本身也支持选中，可以通过checkable属性来设置。当你设置checkable为true时，它的标题栏会出现一个复选框，
+
+如果你勾选了它，那么它的子控件就是可选中的，否则它的子控件就不可操作。
+
+当分组狂可选时，checked属性保存其选中状态
+
+## 9.7 ComboBox
+
+列表框部分可以是一直显示的，也可以是隐藏的
+
+editable属性决定下拉列表框的编辑控件是否可以编辑，默认为false，为true时可以编辑，
+
+此时editText保存编辑框内的内容，同时也可以设置validator属性来限制用户可以输入的文本
+
+ComboBox示例使用的ListModel，内部数据有text和color两个角色
+
+## 9.8 ProgressBar
+
+indeterminate属性比较有意思，当你不知道实际进度时，设置它为true，ProgressBar就会变身为BusyIndicator了，请稍等，就不告诉你等多久，，，它的默认值为false
+
+### 9.8.1 ProgressBarStyle
+
+background用来绘制进度条的背景，progress用来绘制进度
+
+## 9.9 TabView
+
+addTab（title，component）方法用于增加一个标签，第一个参数是标签的标题，第二个参数是一个组件，代表标签对应的可视控件。insertTab（index，title，component）在指定索引位置插入一个标签
+
+## 9.10 Slider
+
+Slider类代表一个水平或垂直的滑块控件，通常用于让用户在某个取值范围内选择一个值
+
+### 9.10.1 SliderStyle
+
+groove属性指向滑槽组件，handle指向滑块组件，tickmarks指向刻度线组件
+
+panel是整个滑块控件的可视对象的根哦，它内部使用Loader来加载groove、handle和tickmarks，如果你要定义panel，就要自己安排其他组件的位置
+
+## 9.11 Flickable
+
+Flickable这个Item比较特别，它生来就是“晃悠”其他Item的。如果你把一个Item放在Flickable内，那这个Item就可以被拖动，当子Item的边界已经显示出来后，你再拖使劲拖，那子Item的边界就像用弹簧连在了Flickable的边界上，你一松手，子Item就开始轻轻弹动，然后慢慢归于平静
+
+当用户开始拖动Flickable对象时发出movementStarted信号。当用户释放鼠标（或手指），拖动结束时，如果Flickable控制的Item的边界还没显示出来，就直接发射movementEnded信号。
+
+如果拖着拖着，被Flickable控制的Item边界显露出来了，并且被拖离了Flickable的边界，此时用户释放鼠标或手指，flickStarted信号发射，然后，被控制的Item会弹动一阵子（具体时间由horizontalVelocity、verticalVelocity、flickDeceleration等属性决定），最后静止下来，此时发射flickEnded信号，紧接着发射movementEnded信号。
+
+contentX、contentY保存被Flickable控制的Item所代表的对象处在Flickable对象左 上角的坐标。
+
+可以通过这两个值加上flickStarted()和flickEnded()信号来实现下拉或上拉刷新。上 拉、下拉刷新，在智能手机上是很常见的交互模式，
+
+## 9.12 Screen对象
+
+Screen对象值的是显示Item的那个屏幕（有的设备有多个屏幕），它提供了一些只读属性来描述屏幕参数
+
 # 第10章 Canvas（画布）
 # 第11章 C++与QML混合编程
 # 第12章 动画
