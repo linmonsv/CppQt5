@@ -674,6 +674,107 @@ touchUpdated信号在有新增触点，已有触点移动、释放、取消时�
 gestureStarted信号多用于MultiPointTouchArea嵌套在Flickable或另外的MultiPointouchArea中这些情景下。在你收到这个信号时，有权决定是否霸占当前触点，
 
 # 第7章 组件与动态对象
+
+## 7.1 Compon（组件）
+
+Component是由Qt框架或开发者封装好的、只暴露了必要接口的QML类型，可以重复利用
+
+一个Component既可以定义在独立的QML文件中，也可以嵌入到其它的QML文档中来定义
+
+### 7.1.1 嵌入式定义组件
+
+，，，最终形成一个具有特定功能的组件
+
+Component通常用来给一个view提供图形化组件
+
+你定义的组件是一个新的类型，它必须被实例化以后才可能显示。
+
+而要实例化一个嵌入在QML文档中定义的组件，则可以通过Loader
+
+### 7.2.2 在单独文件中定义组件
+
+很多时候我们把一个Component单独定义在一个QML文档中
+
+定义Component时要遵守的一个约定：组件名必须和QML文件名一致，，，组件名的第一个字母必须是大写的
+
+在单独文件内定义组件，不需要Component对象，只有在其他QML文档中嵌入式定义组件时才需要Component对象
+
+组件实例的id和组成组件的顶层Item的id是各自独立的
+
+两种使用QMl自定义信号的方式，，，信号处理器，，，signal对象的connect()方法连接，，，
+
+## 7.2 使用Loader
+
+Loader用来动态加载QML组件
+
+### 7.2.1 Loader详细介绍
+
+Loader可以使用其source属性加载一个QML文档，也可以通过其sourceComponent属性加载一个Component对象
+
+对于信号的访问，我们则可以使用Connections对象
+
+Loader和它所加载的Item具有相同的尺寸，这确保你使用锚来布局Loader就等同于布局它加载的Item
+
+如果Loader加载的Item想处理按键事件，那么必须将Loader对象的focus属性设置为true。
+
+又因为Loader本身也是一个焦点敏感的对象，所以如果它加载的Item处理了按键事件，则应当将事件的accepted属性设置为true，以免已经被吃掉的事件再传递给Loader。
+
+### 7.2.2 从文件加载组件
+
+* 一处是将sourceComponent修改为source，其值为“，，，.qml”
+* 一处是两个Connections对象，在onColorPicked信号处理器中，设置了Loader的焦点属性，因为只有Loader有焦点，它加载的Item才会有焦点，如果用鼠标点击某个颜色选择组件而加载它的Loader没有焦点，那么虽然颜色可以改变，但是焦点框出不来。
+
+### 7.2.3 利用Loader动态创建于销毁组件
+
+通过将redLoader的sourceComponent属性设置为undefined、将blueLoader的source属性设置为空串来卸载它们。
+
+这是卸载Loader所加载的组件的两种方式。
+
+使用Loader控制组件的动态创建与销毁，只是QtQuick提供的动态维护对象的两种方式中的一种。
+
+还有一种，就是在ECMAScript中动态创建QML对象。
+
+## 7.3 在ECMAScript中动态创建对象
+
+QML支持在ECMAScript中动态创建对象。这对于延迟对象的创建、缩短应用的启动时间都是有帮助的。
+
+同时这种机制也使得我们可以根据用户的输入或者某些事件动态地将可见元素添加到应用场景中。
+
+在ECMAScript中，有两种方式可以动态地创建对象：
+
+* 使用Qt.createComponent()动态地创建一个组件对象，然后使用Component的createObject()方法创建对象。
+* 使用Qt.createQmlObject()从一个QML字符串直接创建一个对象。
+
+如果你在一个QML文件中定义了一个组件（比如我们的ColorPicker），而你想动态地创建它的实例，使用Qt.createComponent()是比较好的方式；
+
+而如果你的QML对象本身是在应用运行时产生的，那么Qt.createQmlObject()可能是比较好的选择。
+
+### 7.3.1 从组件文件动态创建Component
+
+第一个参数url指向QML文档的本地路径或网络地址；
+
+第二个参数mode指定创建组件的模式，可以是Component.PreferSynchronous（优先使用同步模式）或Component.Asynchronous（异步模式），
+
+忽略mode参数时，默认使用PreferSynchronous模式；
+
+对于嵌入在QML文档内定义的Component，因为Component对象是现成的，可以略去Qt.createComponent()调用，直接使用createObject()方法创建组件实例。
+
+### 7.3.2 从QML字符串动态创建Component
+
+createQmlObject，，，第三个参数用于给新创建的对象关联一个文件路径，主要用于报告错误。
+
+### 7.3.3 销毁动态创建的对象
+
+它的visible属性设置为false或者把opacity属性设置为0，
+
+我们这里说的动态创建的对象，特指使用Qt.createComponent()或Qt.createQmlObject()方法创建的对象，
+
+而使用Loader创建的对象，应当通过将source设置为空串或将sourceComponent设置为undefined触发Loader销毁它们。
+
+要删除一个对象，可以调用其destroy()方法。
+
+QML引擎会在当前代码块执行结束后的某个合适的时刻删除它们。所以，即便你在一个对象内部调用destroy()方法也是安全的。
+
 # 第8章 Qt Quick元素布局
 # 第9章 Qt Quick常用元素介绍
 # 第10章 Canvas（画布）
