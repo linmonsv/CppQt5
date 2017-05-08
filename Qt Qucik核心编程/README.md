@@ -1014,11 +1014,69 @@ int main(，，，)
 app.installEventFileter(new KeyBackQuit());
 
 # 第11章 C++与QML混合编程
+
 # 第12章 动画
+
 # 第13章 Mode/View
+
 # 第14章 多媒体
+
 # 第15章 网络
+
 # 第16章 定位
+
 # 第17章 综合实例之文件查看器
+
+，，，
+
 # 第18章 综合实例之聊哈
+
+，，，
+
 # 附录A 常见问题
+
+**学习Qt Quick**
+故意使用，，，编辑QML文档，韦德就是多记忆一些类库
+
+**如何发布**
+windeployqt 发布，，，qml放到qrc内，所有没有指定应用的qmlmulu
+
+VC运行时库，，，在Qt，，，vcredist目录下，，，
+
+Android版本，，，选择运行，选择部署策略，，，
+
+**怎样保持Android手机屏幕常亮**
+
+从QtActivity继承，重写onCreate方法，，，
+
+在你的活动停止时关闭常亮标记，请重写onStop方法，，，
+
+**创建可扩展的UI来适应各种屏幕**
+
+使用BorderImage、结合PPI、DPI等可以实现这种需求
+
+**如何国际化**
+
+**应用体积太大**
+
+* 只链接你需要的模块，范指Qt Quick模块和Qt C++模块
+* 请尝试自己编译Qt库，裁剪不需要的功能
+
+**静态库版本的Qt**
+
+**隐藏QML文档**
+
+* 把所有的QMl文档都放在qrc中
+* 使用Qt企业版
+
+**自定义Qt Quick控件**
+
+可以使用Canvas，从头绘制控件
+
+**文件操作**
+
+C++代码来访问
+
+**数据库**
+
+”Local storage”
