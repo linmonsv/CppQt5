@@ -554,6 +554,125 @@ console.log(Qt.formatDateTime(today, "yyyy-MM-dd hh:mm:ss.zzz"));
 
 MouseEvent、KeyEvent、GestureEvent、PinchEvent，，，
 
+## 6.1 Qt Quick中的信号与槽
+
+### 6.1.1 连接QML类型的已知信号
+
+（1）信号处理器
+
+当信号时Clicked()时，信号处理器就命名为onClicked，，，以on起始后跟信号名字（第一个字母大写）
+
+还有一种情况，要处理的信号不是当前元素发出来的，
+
+而是来自其他类型（对象），比如处理按键的Keys，这就是附加信号处理器
+
+（2）附加信号处理器
+
+而附加信号处理器，则要遵循<AttachingType>.on<Signal>语法
+
+Component对象也有一些附加信号，如completed()、destruction()，
+
+可以用来在Component创建完成或销毁时执行一些ECMAScript代码来做与初始化或反初始化相关的工作
+
+（3）Connections
+
+一个Connections对象创建一个到QML信号的连接
+
+Connections有一个属性名为target，它指向发出信号的对象
+
+### 6.1.2 如何寻找感兴趣的信号
+
+QML中的信号，一类是输入时间触发的，一类是属性变化触发的
+
+Q_PROPERTY宏就是用来定义QML中可访问属性的，当你看到NOTIFY字样时，它后面的字段就是与属性绑定的信号的名字。
+
+Qt实现了动态属性绑定
+
+### 6.1.3 定义自己的信号
+
+signal关键字给你的类型添加信号，，，
+
+在信号处理器中调用我们刚定义的信号；colorPicker.colorPicked(colorPicker.color);，，，
+
+Loader是专门用来动态创建组件的，它可以从QML文件中创建组件，也可以指定sourceComponent来创建
+
+### 6.1.4 信号与槽的连接
+
+signal对象的connect()防范允许你连接一个信号到另外一个信号或者方法
+
+## 6.2 鼠标
+
+### 6.2.2 MouseArea
+
+MouseEvent的button属性保存了被按下的鼠标按键信息，x、y属性保存了鼠标指针的位置。
+
+还有一个比较重要的属性accepted，如果你处理鼠标事件后不想这个事件再往下传递，就设置其值为true
+
+## 6.3 键盘
+
+### 6.3.2 Keys与信号处理器
+
+KeyEvent代表一个按键事件，如果一个按键被处理，event.accepted应该被设置为true，以免它继续传递；
+
+要是你不设置它，那它可能会继续传递给其它的Item，出现一些奇怪的问题
+
+forwardTo属性是列表类型，它表示传递按键事件给列表内的对象，
+
+如果某个对象accept了某个按键，那位列其后的对象就不会收到该按键事件
+
+也可以在你处理完感兴趣的时间后再调用父类的keyPressEvent()
+
+如果你想让某个元素处理按键，则需要把焦点给它，这通过Item的focus属性来控制，设置为true即可
+
+## 6.4 定时器
+
+### 6.4.1 定时器对象介绍
+
+定时器，就是周期性触发的一个事件，，，你可以利用定时器来完成一些周期性的任务
+
+repeat设定定时器是周期性触发还是一次性触发，默认是一次性的；
+
+running属性，设置为true定时器就开始工作，设置为false就关闭，默认值是false；
+
+triggeredOnStart属性，，，如果你设置这个属性为true，那么定时器开始执行时立马先触发一次，默认值是false
+
+## 6.5 触摸事件
+
+### 6.5.1 PinchArea
+
+PinchArea代表捏拉手势
+
+（1）属性
+
+pinch属性描述捏拉手势的详情，它是一个组合属性
+
+（2）信号
+
+PinchArea有三个信号：pinchStarted()、pinchUpdated()、pinchFinished()
+
+pinchUpdated()信号就会不断地发射，你可以在它的信号处理器中通过pinch参数，截取你需要的值来更新PinchArea寄生的Item的状态
+
+（3）怎样使用
+
+要想使用PinchArea来变换一个Item，有两个方法：
+
+* 设定target属性，，，
+* 处理pinch，，，信号
+
+### 6.5.3 多点触摸
+
+mouseEnabled属性控制是否响应鼠标事件，为true（默认值）时，鼠标会被作为一个触点处理；为false时，鼠标事件会被忽略
+
+touchPoints是列表属性，保存用户定义的用于和Item绑定的触点
+
+MultiPointTouchArea还有pressed、released、updated、touchUpdated、canceled、gestureStarted等信号，我们也可以通过它们来实现应用的交互逻辑。13.8节的找图看实例，通过这些信号实现了手指滑动切换图片、两指捏拉缩放图片等常见功能
+
+touchUpdated信号在有新增触点，已有触点移动、释放、取消时都会触发。它的参数也是touchPoints。
+
+要是有别的Item偷走了你的触摸事件，你会收到canceled信号。
+
+gestureStarted信号多用于MultiPointTouchArea嵌套在Flickable或另外的MultiPointouchArea中这些情景下。在你收到这个信号时，有权决定是否霸占当前触点，
+
 # 第7章 组件与动态对象
 # 第8章 Qt Quick元素布局
 # 第9章 Qt Quick常用元素介绍
