@@ -936,6 +936,83 @@ contentX、contentY保存被Flickable控制的Item所代表的对象处在Flicka
 Screen对象值的是显示Item的那个屏幕（有的设备有多个屏幕），它提供了一些只读属性来描述屏幕参数
 
 # 第10章 Canvas（画布）
+
+QML中的Canvas，俗称画布，它用来定义一个绘图区域
+
+## 10.1 开始之前
+
+### 10.1.1 画布
+
+### 10.1.2 画师
+
+索引模式查找“Context2D”关键字
+
+getContext("2d")
+
+### 10.1.3 画笔
+
+strokeStyle属性
+
+### 10.1.4 画刷
+
+画刷，就是用来填充画笔勾勒出的区域的
+
+在Context2D这里，fillStyle属性就是描述画刷的
+
+### 10.1.5 坐标系
+
+### 10.1.6 图元
+
+图元，其实是”图形元素“一词的简称，指可以编辑的最小图形单位
+
+在使用Canvas和Context2D时，基本的图元有线、弧、矩形、曲线、文本、图片等
+
+## 10.2 基本绘图模式
+
+onPaint()信号处理器内使用Context2D对象来绘图
+
+有两种使用Context2D对象的方式，上面的示例中在onPaint信号处理器中调用getContext("2d")获取Context2D对象，这是一种方式
+
+还有一种方式，当我们设置了Canvas对象的contextType属性（2D绘图时取值为”2d“)后，context属性就会保存一个可用的Context2D对象
+
+## 10.3 绘制路径
+
+调用stroke()方法结束路径的绘制并使用strokeStyle保存的颜色描画路径的边线
+
+Context2D的createLinearGradient()方法用于创建一个线性渐变对象，createRadialGradient()方法可以创建一个放射渐变对象，，，
+
+Context2D对象与路径相关的方法还有很多，moveTo()方法可以移动到某个点，以这个点为起点开始一个新路径。
+
+closePath()方法用于结束当前的路径，从路径终点到起点绘制一条直线来封闭路径
+
+二次方贝赛尔曲线（quadraticCurveTo()）、三次方贝赛尔曲线（bezierCurveTo()），，，
+
+## 10.4 绘制文本
+
+## 10.5 绘制图片
+
+只有成功加载的图片，才可以使用Context2D来绘制
+
+## 10.6 变换
+
+平移变换、绘图操作完成后，应当调用restore()来恢复之前的画布状态，否则发生重绘时（比如用户拖动窗口改变大小），你就看不见绘制的图元了。而要restore()必先save()
+
+## 10.7 裁切
+
+Context2D的clip()方法，让我们能够根据当前路径包围的区域来裁切后续的绘图操作在此区域之外的图像都会被丢弃掉
+
+## 10.8 图像合成
+
+Context2D允许我们绘制一个图元，将其与已有的图像按照globalCompositeOperation属性指定的模式合成
+
+## 10.9 ，，，
+
+事件过滤器，过滤BACK按键
+
+int main(，，，)
+，，，
+app.installEventFileter(new KeyBackQuit());
+
 # 第11章 C++与QML混合编程
 # 第12章 动画
 # 第13章 Mode/View
