@@ -1527,14 +1527,151 @@ populate属性指定一个过渡动画，在ListView第一次实例化或者因M
 如果ListView的model内的数据没有按分组顺序编排，，，，那么ListView则可能显示多个相同的section
 
 ## 13.2 XmlListModel的用法
+
+XmlListModel用于从XML数据中创建一个只读的model，它可以作为各种view元素的数据源
+
+XmlListModel使用XPath表达式来提取XML文档中的数据
+
+### 13.2.1 XPath简介
+
+XPath是一门在XML文档中查找信息的语言，它使用路径表达式在XML文档中进行导航
+
+在XPath中，有7种类型的节点：元素、属性、文本、命名空间、处理指令、注释以及文档节点（或称为根节点）。
+
+XML文档是被作为节点树来对待的。树的根被称为文档节点或者根节点
+
+，，，文档节点，，，元素节点，，，属性节点
+
+在XPath语言中，节点是沿着路径选择的
+
+最常用的路径表达式，，，
+
+实际的XPath路径表达式
+
+使用谓语的XPath
+
+在XPath表达式中还可以使用一些运算符
+
+### 13.2.2 XmlRole
+
+isKey属性是个布尔值，它定义当前XmlRole是否是一个关键的role。关键的role会在XmlListModel的reload()方法被调用时被更新或者添加到model中
+
+### 13.2.3 XmlListModel的属性与方法
+
+（1）XmlListModel
+
+（2）Delegate
+
+，，，同时还设置了最多显示两行，如果两行还显示不全，则在文本右侧以省略号替代不能显示的文字
+
 ## 13.3 使用C++ Model
+
+创建一个Qt Quick APP项目
+
+### 13.3.1 C++实现QML可用的Model
+
+ListView可以使用C++语言中定义的Model，XmlListModel就是C++实现（QQuickXmlListModel）然后导出到QML环境中的。
+
+你可以从QAbstractItemModel或者QAbstractListModel继承来实现你自己的Model类，后者相对简单一些。
+
+最简单的实现，只需要重写rowCount()、data()、rowNames()三个方法
+
+### 13.3.2 将Model导出到QML中
+
+### 13.3.3 QML代码的变化
+
 ## 13.4 TableView
-## 13.5 ，，，
+
+### 13.4.1 ，，，
+
+### 13.4.2 定制表格外观
+
+通过设置itemDelegate、rowDelegate、headerDelegate等属性，可以定制表格的外观
+
+### 13.4.3 动态修改TableView
+
+## 13.5 实例：股票跟踪
+
+，，，牵扯到的技术点，，，：
+
+* TableView外观定制
+* QML与C++混合编程
+* C++ Model
+* 使用Qt的qrc资源文件系统
+* Windows托盘编程
+* http下载
+* Qt Quick国际化
+* Android应用国际化
+* 使用JNI扩展Qt on Android应用
+* 跨平台编程隔离平台相关代码的策略
+
 ## 13.6 GridView
+
+GridView与ListView类似，最大的不同在于Item的呈现方式。
+
+如果你熟悉QListView，可以将ListView对应QListView的ListMode显示模式，GridView对应IconMode显示模式
+
+GridView对方向键的支持，与此相关的有一个属性：keyNavigationWraps
+
 ## 13.7 PathView
+
+path是PathView的专有特性，它指定PathView用来放置Item的路径
+
+### 13.7.1 Path简介
+
+Path的属性startX、startY用于描述路径起点。
+
+pathElements属性是个列表，是默认属性，它保存组成路径的多个路径元素，常见的路径元素有PathLine、PathQuad、PathCubic、PathArc、PathCurve、PathSvg。
+
+路径上最后一个路径元素的终点就是整个路径的终点，如果终点与起点重合，那么Path的closed属性就为true。
+
+### 13.7.2 PathAttribute
+
+PathAttribute放在某个路径段的前面，指明这段路径起始时的属性值；
+
+路径段后面的PathAttribute指明路径段终止时的属性值；
+
+而在路径段上的属性值，Path会根据起、止值自动插值计算。
+
+### 13.7.3 PathPercent
+
+PathPercent放在组成路径的元素后面，
+
+比如放在PathLine后面，指明它前面的那部分路径（通常由一个或多个Path元素组成）所放置的Item数量占整个路径上所有Item数量的比率。
+
+### 13.7.4 使用PathView
+
 ## 13.8 ，，，
+
 ## 13.9 Repeater
+
+Repeater是一个非常特别又非常好用的类，它用来创建多个基于Item的组件，扔给它的父（通常是定位器或布局管理器）来管理
+
+Repeater对象会在自己实例化后一次性地创建由model决定的所有Item，这在某些情况下可能会被认为效率低下
+
+### 13.9.1 model为数字
+
+text: index
+
+Text对象显示索引
+
+### 13.9.2 model为字符串
+
+当使用字符串列表作为model时，Repeater创建的Item数量由列表长度决定，在delegate内可以通过modelData访问字符串对象
+
+### 13.9.3 model为对象列表
+
+使用对象列表作为model域使用字符串列表类似，只是modelData代表model中的对象
+
+### 13.9.4 model为ListModel
+
 ## 13.10 ListView的下拉刷新效果
+
+，，，
+
+在onFlickStarted信号处理器中我们仅仅是将flick开始时的contentY记录到contentYOnFlickStarted属性中。
+
+在onFlickEnded信号处理器中比较flick结束时的contentY和开始时的contentY（即contentYOnFlickStarted），结束时小，说明是下拉，
 
 # 第14章 多媒体
 ## 14.1 MediaPlayer
