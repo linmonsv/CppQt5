@@ -1674,15 +1674,113 @@ Text对象显示索引
 在onFlickEnded信号处理器中比较flick结束时的contentY和开始时的contentY（即contentYOnFlickStarted），结束时小，说明是下拉，
 
 # 第14章 多媒体
+
+在Windows系列平台上，它使用DirectShow；
+在Linux系列平台上，它使用GStreamer；
+在Android平台上，它对接Android的MediaPlayer框架
+
 ## 14.1 MediaPlayer
+
+MediaPlayer是QML提供的核心多媒体类，可以播放音频、视频
+
 ## 14.1.1 播放音乐
+
+音乐的时长，访问duration属性，它是整型值，单位是毫秒
+
+播放状态变化时，会发出playbackStateChanged()信号，
+
+在onPlaybackStateChanged信号处理器内，可以读取枚举类型的playbackState属性
+
+操作可能是异步的，当方法返回时position属性不一定会立即变成新的
+
 ## 14.1.2 视频
+
+播放视频比音乐稍稍复杂一些，需要使用VideoOutpu元素与MediaPlayer配合，
+
+VideoOutput用来渲染视频，也可以作为相机的取景器（预览窗口），
+
+最简单的用法是，你只需要将其source属性指向一个MediaPlayer对象即可
+
+如果你在Windows平台上使用qmlscene加载simple_video.qml，不一定能够播放，，，
+
+要确保你的系统安装了必须的DirectShow Filter才行
+
 ## 14.1.3 多媒体元信息
+
+多媒体元信息？就是媒体以外、用来描述媒体的那些信息，
+
+比如一首歌，专辑、发行时间、艺术家、采样率等，就是元信息；又如一个视频，分辨率、编码格式、帧率等，就是元信息。
+
+MediaPlayer对象有个分组属性metaData，它包含了方方面面的元信息，
+
+，，，不一定可用
+
 ## 14.2 拍照
+
+拍照的过程，在开发应用时，实际上可以拆分为三步：
+
+* 配置相机。
+* 设置取景器。
+* 调整参数，抓取图像。
+
 ## 14.2.1 配置Camera
+
+Camera对象用来访问和控制系统的物理设备，完成拍照功能。它能控制闪光、曝光、聚焦等与拍照相关的各种设置。
+
+（1）CameraFocus
+
+focus是Camera的一个属性，类型是CameraFocus，主要用来控制聚焦和焦点模式。
+
+（2）CameraExposure
+
+CameraExposure用来控制相机的曝光选项，你可以通过Camera的exposure属性完成这项复杂又晦涩的工作。
+
+CameraExposure还可以控制快门速度，
+
+（3）CameraFlash
+
+flash选项（CameraFlash类型）是控制闪光的，
+
+（4）CameraImageProcessing
+
+很多相机固件支持对镜头捕获的图片做一些处理，如降噪、白平衡、锐化、对比度、饱和度等。
+
+Camera的imageProcessing属性可以设置这些选项，当然前提是相机固件支持。
+
 ## 14.2.2 设置取景器VideoOutput
+
+所谓取景器，就是一个预览相机视频的窗口，
+
+取景器让你看到焦点在哪里，图像是否发虚，角度是否合适等。
+
+在QML里，VideoOutput可以作为取景器使用，只需将其source属性设置为Camera对象即可。
+
+
 ## 14.2.3 捕获静态图片
+
+当你手指点击界面上那个按钮时，代码中实际上调用了CameraCapture类的capture()或captureToLocation（location）方法来捕获图片。
+
+其中path为字符串，是一个本地路径，不是URL。
+
+一般要先调用Camera的searchAndLock()方法，锁定动作完成后，lockStatus属性会变化，实现onLockStatusChanged信号处理器就可以监听锁定结果，
+
+当lockStatus属性的值为Camera.Locked时说明锁定成功，此时再调用imageCapture.capture()，得到的图像焦点就清晰了。
+
 ## 14.2.4 简单的拍照实例
+
+对于放大、缩小、闪光以及曝光这些选项，在我的DELL笔记本电脑上，都是无效的。
+
+而在我的酷派K1上，都是可以用的。你也可以在手机上试试，看哪些选项能用。
+
+（1）界面切换
+
+（2）相机选项控制
+
+（3）取景器设置
+
+在Android平台上，企图通过设置width、height属性让VideoOutput对象龟缩一隅是难以得逞的，你只能接受它霸占整个屏幕
+
+（4）拍照
 
 # 第15章 网络
 ## 15.1 ，，，支持网络的对象
