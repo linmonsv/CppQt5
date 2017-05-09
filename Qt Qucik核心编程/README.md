@@ -1121,6 +1121,277 @@ QmetaObject的invokeMethod()方法用来调用一个对象的信号、槽、可�
 
 # 第12章 动画
 
+Qt Quick提供了比较丰富的动画类库，可以让我们的界面动起来。
+
+一般的动画都是通过操作Item的property来实现的
+
+## 12.1 动画元素分类
+
+SpringAnimation，允许一个property跟踪一个值，动画效果类似于弹簧运动。
+
+QtQuick还提供了用于组合多个动画对象的分组动画对象：
+
+* SequentialAnimation，顺序执行一系列动画。
+* ParallelAnimation，并行执行一系列动画。
+
+还有一些对象虽然本身不是直接的动画元素，但却是有些QMLItem能够动起来的基础，我称之为动画搭档。
+
+* State，Item的状态，不同状态对应不同的界面效果和业务逻辑，可以将动画应用于不同状态间的迁移过程。
+* Transition，过渡，衔接Item的状态和动画，使状态变化过程平滑。
+
+还有一些动画元素，需要与其他动画对象结合才能产生较好的效果，我称之为协同动画元素。
+
+## 12.2 基本动画元素
+
+Animatio---Qt Quick抽象出来的动画元素接口
+
+### 12.2.1 Animation
+
+Animation是Qt Quick中所有动画类的基类。
+
+### 12.2.2 PropertyAnimation
+
+（1）单独使用
+
+我们在定义PropertyAnimation对象时，首先使用target属性指定要操作的目标对象，，，
+
+然后使用property属性指明要改变目标对象的哪个属性，，，，
+
+再使用to属性指定目标属性的目标值，，，
+
+最后设置duration属性为1000毫秒，，，配置完毕
+
+PropertyAnimation还有from属性
+
+如果你想同时改变多个属性，，，
+
+如果想同时改变多个目标对象，，，
+
+easing属性，，，指定动画的松弛曲线
+
+（2）在信号处理器中使用
+
+（3）使用Animation on <property>
+
+可以使用Animation on <property>这种语法将一个PropertyAnimation与一个属性关联起来
+
+，，，我们把PropertyAnimation关联到widt属性上，这种定义方法，不需要再设定targe和property属性，
+
+因为PropertyAnimation和width建立关联后，这两个属性不言自明。所以，采用这种方式定义动画，代码变得更加简单
+
+### 12.2.3  NumberAnimation
+
+NumberAnimation是PropeAnimation的派生类，专门处理数字类型的property，它重写了from和to两个属性，将其类型设置为real
+
+### 12.2.4 ColorAnimation
+
+ColorAnimation是PropeAnimation的派生类，专门处理color类型的property，它重写了from和to两个属性，将其类型设置为color
+
+### 12.2.5 RotationAnimation
+
+RotationAnimation是PropeAnimation的派生类，专门处理rotation和angle类型的property，它重写了from和to两个属性，将其类型设置为real
+
+RotationAnimation在旋转一个Item时以Item的transformOrigin属性指定的点为中心，
+
+这个属性为枚举类型，默认值是Item.Center。它可以取这些，，，
+
+### 12.2.6 PathAnimation
+
+PathAnimation是从Animation继承而来的，它让目标对象沿着一个既定的路径运动。像PropertyAnimation一样，它也有一个easing属性
+
+anchoPoint属性描述目标对象的哪个店锚定在路径上
+
+orientation属性控制目标对象沿着路径运动时的旋转策略
+
+easing.type，我设置它为Easing.InOutCubic，这个类型会在前半程加速，到达终点后开始减速
+
+### 12.2.7 SmoothedAnimation
+
+SmoothedAnimation是NumberAnimation的派生类，它默认将easing.type设置为Easing.InOutQuad，在from和to之间产生平滑的动画效果
+
+将velocity设置为-1禁用速率，如果from和to的距离过短，SmoothedAnimation会自行调整velocity来适应
+
+当duration和velocity同时设置时，SmoothedAnimation会根据from、to之间的距离和速率计算出按照速率完成动画所需的时间，
+
+拿这个时间与duration比较，如果duration短就使用duration，否则使用velocity。
+
+### 12.2.8 SpringAnimation
+
+SpringAnimation模仿弹簧的振荡行为
+
+damping属性代表衰减系数，其值越大振荡会越快平复
+
+## 12.3 组合动画
+
+### 12.3.1 ParallelAnimation
+
+ParallelAnimation从Animation继承而来，没有添加额外的属性，
+
+它本身单独使用没有意义，不产生动画效果。
+
+你只需要在声明ParallelAnimation对象时在其中定义多个子动画对象，
+
+ParallelAnimation开始运行时就会并行执行它们。
+
+### 12.3.2 SequentialAnimation
+
+SequentialAnimation与ParallelAnimation类似，不同之处是它的子动画对象是一个个顺次执行的。
+
+在onClicked信号处理器内SequentialAnimation重置了要变化的属性，以便动画每次开始执行时都初始初始状态
+
+## 12.4 State
+
+在QML中，状态是定义在State类型中的一系列属性配置
+
+### 12.4.1 使用State变换文本的小示例
+
+### 12.4.2 State详解
+
+属性：
+
+* name
+* when
+* extend
+* changes，类型是list<Change>，一个列表，保存应用与这种状态的所有变化
+
+总结一下，应用一种状态有两种方式：
+
+* 显示改变Item的state属性
+* 将State的when属性绑定到一个表达式上
+
+可用于State的Change对象：
+
+* PropertyChanges，，，，
+* ParentChange，用来改变一个对象的父，，，
+* AnchorChanges，，，，
+* StateChangeScript，用来执行一个ECMAScript
+
+### 12.4.3 PropertyChange
+
+PropertyChanges的restoreEntryValues属性也是个布尔值，
+
+用于指定离开本状态时是否将本状态改变的那些属性的值重置为进入本状态之前的值。
+
+默认值为true，假如你设置这个属性为false，那么这种状态对目标对象的改变将是持久的。
+
+PropertyChanges对象给rect的width属性赋值parent.width，
+
+而parent.width本身是一个ECMAScript表达式，
+
+由于PropertyChanges的explicit属性默认为false，于是rect.width绑定到了parent.width这个表达式上，
+
+当我们改变窗口尺寸时，parent.width的返回值就会发生变化，于是rect的宽度也变了，始终与它的父Rectangle的宽度保持一致
+
+给PropertyChanges对象声明添加一行代码“explicit：true”
+
+设置explicit为true产生的效果：进入“resetwidth”状态时，
+
+只是一次性地把parent.width计算出来作为一个静态的值传递给rect.width，没有发生表达式绑定行为。
+
+### 12.4.4 ParentChange
+
+* parent，指定目标对象的新parent
+
+对于ParentChange对象，你只能使用它定义的那几个属性，否则会报错
+
+PropertyChanges虽然只定义了少数几个属性，但你却可以设定Item支持的大多数属性
+
+### 12.4.5 AnchorChanges
+
+AnchorChanges用来改变一个Item的锚布局属性
+
+AnchorChanges不能改变一个Item的锚布局留白，不过你可以使用PropertyChanges来改变它们
+
+### 12.4.6 StateChangeScript
+
+StateChangeScript允许你在状态变化时执行ECMAScript脚本。
+
+它有两个属性，
+
+一个是name，表示脚本的名字，这个名字可以被ScriptAction对象引用，以便复用这里的脚本代码；
+
+一个是script，代表实际的脚本代码。
+
+colorMaker.js，，，
+
+PropertyChange可以实现ParentChange、AnchorChanges的功能，但后两者在实现相同的功能时效率会更好一些
+
+## 12.5 Transition
+
+State对Item的改变，就是瞬间移动
+
+在GUI的角度来讲，“突变”这种体验也不那么友好。而Transition（过渡）的存在，就是为了消除这种突变
+
+当一个Item从一个State切换到另一个State时，Transition定义的动画会自动在两个State之间运行，从而消除状态间的突变，是的状态迁移更加平滑
+
+Item的transition属性是个列表
+
+默认值也是“*”。如果你不设置from和to属性，那么Transition就会匹配所有的状态变化
+
+reversible属性指定触发transition的条件反转时Transition是否自动反转，默认值是false。
+
+如果你没有指定Transition的from和to属性，那么多个transition是并发执行的，而且会应用到所有状态变化路径上；
+
+此时不需要设置reversible属性，因为当Item的State反转时也会触发transition。
+
+但是如果你使用了SequentialAnimation或者设置了from、to属性，那么在某些场景下你可能需要设置reversible属性才能达到预期的效果。
+
+当你为一个Transition定义动画时，不需要为Animation指定from和to属性。
+
+from属性默认会被设置为Item对应属性的当前值，而to属性则会被设置为目标状态内为该属性设定的目标值。
+
+当然，要是你愿意的话，也可以手动设置它们来覆盖默认值。target属性也不用指定，结合State和Transition，target是显而易见的。
+
+Transition的animations属性是默认属性，所以我在为其定义动画对象时没有使用显式的初始化语句（animations:Type{}），
+
+因为对于没有指定目标的对象声明，都会传递给默认属性。虽然这里定义的两个动画没有使用ParallelAnimation来分组，但它们依然是并行执行的，
+
+MouseArea对象的hoverEnabled属性设置为true，处理鼠标经过的事件，使entered、exited信号生效。
+
+然后在onEntered、onExited、onClicked三个信号处理器中显式地给linkText.state赋值来改变状态触发Transition。
+
+## 12.6 协同动画元素
+
+Behavior对象用于给Item的某个属性绑定默认动画。
+
+ParentAnimation、AnchorAnimation通常需要和Transition、State联合使用。
+
+PauseAnimation可以插入在 **多个动画之间产生暂停** 效果。
+PropertyAction可以插入在 **多个动画之间来立即改变某个属性** 。
+ScriptAction用于在 **动画执行过程中** 运行一段ECMAScript脚本。
+
+### 12.6.1 Behavior
+
+Behavior用来给一个property定义默认动画，
+
+当该property变化时执行该动画。一个property只能绑定一个Behavior，
+
+一个Behavior内只能有一个顶层动画（因为其animation属性的类型是Animation，而非list<Animation>），
+
+如果你想在一个property变化时执行多个动画，则可以使用ParallelAnimation或SequentialAnimation。
+
+如果你给Item定义了State，而State变化时触发了Transition，
+
+Transition要改变的property上绑定了Behavior，那么Transition会覆盖Behavior。
+
+使用Behavior定义动画时，动画对象不需要设置target、property、from、to等属性，非常方便。
+
+因为animation是Behavior的默认属性，也不需要显式地初始化，只要直接在Behavior内声明动画对象即可。
+
+### 12.6.2 ParentAnimation
+
+ParentAnimation在改变一个Item的parent时使用，使得该Item从旧parent移动到新parent的过程更平滑。
+
+ParentAnimation可以包含一个或多个其他的动画对象，这些动画会并发执行。
+
+### 12.6.3 AnchorAnimation
+
+我指定AnchorAnimation的easing.type为Easing.OutInCubic，效果是先减速到半程然后再加速。
+
+## 12.7 ，，，
+
+Qt Qucik动画元素的综合使用
+
 # 第13章 Mode/View
 
 # 第14章 多媒体
