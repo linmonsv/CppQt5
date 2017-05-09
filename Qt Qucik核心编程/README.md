@@ -1872,12 +1872,42 @@ HTTP协议定义了很多头部，比如User-Agent、Content-Type、Accept-Encod
 基于套接字来开发某些网络功能，此时就只能使用低阶的QTcpSocket或QUdpSocket类了，必须要在C++中完成相关模块。
 
 # 第16章 定位
+
 ## 16.1 类库介绍
+
 ## 16.1.1 coordinate
+
+coordinate是QtPositioning模块提供的基本类型，用来表示一个地理位置
+
 ## 16.1.2 QtPositioning
+
 ## 16.1.3 Position
+
+Position保存特定时间点的位置信息，比如坐标、速度等
+
+speed属性表示对地速度，单位是米/秒
+
 ## 16.1.4 PositionSource
-## 16.2 ，，，
+
+PositionSource类是定位功能的核心，用于获取用户的位置信息，
+
+只有设置其active属性为true，实现onPositionChanged信号处理器即可
+
+## 16.2 团购查询示例
+
+### 16.2.1 百度API说明
+
+（1）查询城市
+
+（2）查询团购
+
+### 16.2.2 手机运行效果
+
+1. 获取位置
+2. 获取到城市信息
+3. 餐饮和娱乐查询结果
+
+### 16.2.3 源码分析
 
 # 第17章 综合实例之文件查看器
 
