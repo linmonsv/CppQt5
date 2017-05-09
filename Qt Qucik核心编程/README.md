@@ -1783,18 +1783,93 @@ Camera的imageProcessing属性可以设置这些选项，当然前提是相机�
 （4）拍照
 
 # 第15章 网络
+
 ## 15.1 ，，，支持网络的对象
+
 ### 15.1.1 Image
+
 ### 15.1.2 Qt.createComponent
+
 ### 15.1.3 Loader对象
+
 ### 15.1.4 QQmlApplicationEngine
+
+QQmlApplicationEngine的load()方法，其参数类型是QUrl，能够接受网络地址
+
 ### 15.1.5 QQuickView
+
 ### 15.1.6 MediaPlayer
+
 ## 15.2 QML里的HTTP
+
+不依赖C++，QML也能完成常见的HTTP操作。提供这种能力的，就是XMLHttpRequest类
+
+其实，它什么都能处理，text、html、json、binary ......
+
 ### 15.2.1 XMLHttpRequest类介绍
+
+属性：
+
+**readyState**
+
+每次这个属性的值增加的时候，都会触发onreadystatechange回调
+
+**responseText**
+
+，，，否则就假定文本内容使用UTF-8编码
+
+**responseXML**
+
+XMLHttpRequest会判断收到的数据是否为XML格式，
+
+如果是，则将其解析为一个DOM对象，保存到responseXML属性中；
+
+**，，，**
+
+**setRequestHeader()**
+
+HTTP协议定义了很多头部，比如User-Agent、Content-Type、Accept-Encoding等
+
+**，，，**
+
+**abort()**
+
+这个方法重置XMLHttpRequest对象的状态，readyState归0，并且取消所有未决的网络活动
+
+**getResponseHeader()**
+
+这个方法返回指定的HTTP头部的值，清在readyState大于等于3时调用它
+
+**，，，**
+
 ### 15.2.2 GET小示例
+
+，，，访问CSDN
+
+，，，访问XML文档
+
 ### 15.2.3 POST数据
+
+使用XMLHttpRequest执行POST操作与GET类似，不同之处有两点：
+
+一是open()的第一个参数需要指定HTTP方法为POST；
+
+二是send()方法的参数不为null。
+
 ## 15.3 使用C++代码完成复杂的网络操作
+
+* QNetworkAccessManager是中心，它提供了发送请求的各种API，以及网络配置相关的方法。
+* QNetworkRequest代表 一个 网络 请求， 包括 URL、 HTTP 访问 用的 User- Agent、 用 户名、 密码 等 都 通过 它 设置。
+* QNetworkReply是QNetworkAccessManager根据你提交的QNetworkRequest构造的一个应答对象，一旦请求发出，你就可以通过它获知网络操作过程中的各种状态。
+* QUrl是构造请求（QNetworkRequest对象）时常用的类，它可以编解码URL，提取URL中的主机、路径、文件、用户名、密码等信息。
+
+使用QNetworkAccessManager进行HTTP编程的基本步骤如下：
+
+1. 根据URL生成QUrl对象，然后根据QUrl创建一个网络请求QNetworkRequest，必要时可设置一些header。
+2. 调用QNetworkAccessManager的get()、post()等方法中的一个。
+3. 使用QNetworkAccessManager返回的QNetworkReply实例来跟踪应答的各种状态反馈。
+
+基于套接字来开发某些网络功能，此时就只能使用低阶的QTcpSocket或QUdpSocket类了，必须要在C++中完成相关模块。
 
 # 第16章 定位
 ## 16.1 类库介绍
