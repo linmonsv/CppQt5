@@ -1393,7 +1393,139 @@ ParentAnimation可以包含一个或多个其他的动画对象，这些动画�
 Qt Qucik动画元素的综合使用
 
 # 第13章 Mode/View
+
+Model-View-Controller（MVC）是源自SmallTalk的一个设计模式
+
+思想实质就是“关注点分离”
+
+模型代表数据，通过精心设计的接口向外部提供服务
+
+视图是呈现给用户看的可视化界面
+
+控制器就是个中间人，它从模型拉数据给视图，数据变化时通知视图更新，用户想针对数据干点什么，，，它也通知模型来响应这种变化
+
+Qt中的Model-View编程框架，对Controllerb部分做了改动，引入了Delegate的概念，合起来就是Model-View-Delegate
+
+QAbstractItemModel，，，
+
+QAbstractItemView
+
+QAbstrItemDelegate
+
 ## 13.1 ListView
+
+ListView用来显示一个条目列表，条目对应的数据来自于Model，而每个条目的外观则由Delegate决定
+
+要使用ListView，必须为其指定一个Model、一个Delegate
+
+Model可以是QML内建类型，比如ListModel、XmlListModel
+
+### 13.1.1 ListView的简单使用
+
+共同构成一个ListElement的一个或多个数据信息被称为role，它包含一个名字（role-name）和一个值（role-value）。
+
+role的定义就像QML对象属性定义那样简单，语法是这样的：<role-name>: <role-value>，
+
+其中role-name必须以小写字母开头，role-value必须是简单的常量
+
+在ListElement中定义的role，可以在Delegate中通过role-name来访问
+
+ListView给delegate暴露了一个index属性，代表当前delegate实例对应的Item的索引未知，必要时可以使用它来访问数据
+
+，，，manufacture的Text对象通过wrapper.ListView.isCurrentItem判断本delegate实例呈现的数据是否是当前条目
+
+示例通过给highlight初始化一个Rectangle定义了高亮背景
+
+如highlightFollowsCurrentItem属性指定高亮背景是否跟随当前条目，默认值为true，
+
+你用鼠标点选某个Item时，高亮背景会经过一个平滑的动画后移动到新的Item下面
+
+### 13.1.2 header
+
+通过为ListView的header属性设置一个Component，ListView就可以显示自定义的表头，
+
+表头将放在ListView的最开始，所有的Item之前
+
+为ListView添加header并不会影响你再delegate中看到的index值，index值依然是从0开始
+
+### 13.1.3 footer
+
+footer属性允许我们指定ListView的页脚
+
+在QML中非只读属性变化时一般都会发射一个信号，通常你可以使用类似于on<Property>Changed的语法来定义对应的信号处理器，，，
+
+直接在信号处理器中访问对应属性来访问当前值
+
+为了使footer能够跟随当前Item发生变化，我为listView定义了onCurrentIndexChanged信号处理器，
+
+因为currentIndexChanged信号不带参数，所以只能再次访问currentIndex属性来获取当前Item的索引，
+
+然后通过ListModel的get()方法获取到对应的数据对象
+
+### 13.1.4 访问与修改Model
+
+（1）访问数据
+
+一旦你使能了dynamicRoles，ListModel的性能会大大下降，通过它带来的性能损失是使用静态类型的4~6倍
+
+（2）删除数据
+
+删除一条或多条数据，可以使用ListModel的remove(int index, int count)方法，它有两个整型参数，
+
+第一个参数指明要删除的数据的索引位置，
+
+第二个参数表示要删除的数据条数，默认值为1
+
+（3）修改数据
+
+要想修改Model的数据，可以使用ListModel的setProperty(int index, string property, variant value)方法
+
+如果想替换某一个数据，可以使用set(int index, jsobject dict)方法
+
+（4）添加数据
+
+要向Model的尾部添加数据，可以使用append()方法
+
+如果想在指定位置添加数据，可以使用insert()方法
+
+### 13.1.5 动画效果
+
+**add**
+
+add属性指定向ListView新增一个Item时针对该Item应用的过渡动画
+
+尽量不要再add动画中改变Item的高度，因为这样会引起它下面的其他Item呗重新布局进而错放位置，也会带来性能上的损耗
+
+，，，最终的效果是，新增的Item从ListView上方渐现、缓缓下落到特定位置
+
+，，，新增Item下方的哪些被迫以为的Item，没有明显的动画效果。这是因为displaced属性默认为null，ListView没有提供默认的移位动画
+
+**displaced**
+
+displaced属性用于指定通用的、由于Model变化导致Item移位时的动画效果
+
+，，，位于新增Item下方的那些Item会向下移动，来回弹几次才平静下来
+
+**remove**
+
+双击一个Item，它会先移动到ListView顶部，然后再慢慢变得看不见
+
+**move**
+
+move属性指定移动一个Item时要应用的过度动画，，，
+
+**populate**
+
+populate属性指定一个过渡动画，在ListView第一次实例化或者因Model变化而需要创建Item时应用
+
+### 13.1.6 section
+
+所谓view section，其实就是根据model内数据的role-name来给Item分组
+
+对ListView分组并不会引起ListView自动按分组来整理Item的顺序。
+
+如果ListView的model内的数据没有按分组顺序编排，，，，那么ListView则可能显示多个相同的section
+
 ## 13.2 XmlListModel的用法
 ## 13.3 使用C++ Model
 ## 13.4 TableView
