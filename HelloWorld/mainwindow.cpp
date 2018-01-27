@@ -12,3 +12,14 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::showWorld()
+{
+    static bool bFlag = false;
+    if(bFlag) {
+        ui->lineEdit->setText("");
+    } else {
+        ui->lineEdit->setText("World");
+    }
+    bFlag = !bFlag;
+}

@@ -17,6 +17,11 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+
+private slots:
+    void showWorld();
+
 };
 
 #endif // MAINWINDOW_H
