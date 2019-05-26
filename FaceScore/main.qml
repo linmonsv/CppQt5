@@ -11,6 +11,7 @@ Window {
     title: qsTr("Face Score")
 
     Image {
+        objectName: "imageViewer"
         id: imageViewer;
         asynchronous: true;
         cache: false;
@@ -49,5 +50,17 @@ Window {
            var imageFile = new String(fileDialog.fileUrl);
            imagePath.text = imageFile.slice(8);
        }
+   }
+
+   Button {
+       objectName: "quitButton"
+       id: quit;
+       text: "Quit";
+       anchors.right: parent.right
+       anchors.rightMargin: 8;
+       anchors.bottom: parent.bottom;
+       anchors.bottomMargin: 8;
+
+       //onClicked: fileDialog.open();
    }
 }

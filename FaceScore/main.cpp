@@ -1,11 +1,18 @@
 #include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
+
+#include <QObject>
+#include <QDebug>
+
+#include "mychooseimage.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-    QGuiApplication app(argc, argv);
+    //QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
@@ -26,10 +33,16 @@ int main(int argc, char *argv[])
         }
     }
 
-    QObject *fileDialog = root->findChild<QObject *>("fileDialog");
+    MyChooseImage *myChooseImage = new MyChooseImage(root);
+
     QObject *openButton = root->findChild<QObject *>("openButton");
-    if(fileDialog && openButton) {
-        QObject::connect(openButton, SIGNAL(clicked()), fileDialog, SLOT(open()));
+    if(openButton) {
+        QObject::connect(openButton, SIGNAL(clicked()), static_cast<QObject *>(myChooseImage), SLOT(getImagePath()));
+    }
+
+    QObject* quitButton = root->findChild<QObject*>("quitButton");
+    if (quitButton) {
+        QObject::connect(quitButton, SIGNAL(clicked()), &app, SLOT(quit()));
     }
 
     QObject *imagePath = root->findChild<QObject *>("imagePath");
