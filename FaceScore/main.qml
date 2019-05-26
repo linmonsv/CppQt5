@@ -4,6 +4,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.2
 
 Window {
+    objectName: "rootObject"
     visible: true
     width: 640
     height: 480
@@ -18,6 +19,7 @@ Window {
     }
 
    Button {
+       objectName: "openButton"
        id: openFile;
        text: "Open";
        anchors.left: parent.left
@@ -25,10 +27,11 @@ Window {
        anchors.bottom: parent.bottom;
        anchors.bottomMargin: 8;
 
-       onClicked: fileDialog.open();
+       //onClicked: fileDialog.open();
    }
 
    Text {
+       objectName: "imagePath"
        id: imagePath;
        anchors.left: openFile.right;
        anchors.leftMargin: 8;

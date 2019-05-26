@@ -16,5 +16,25 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
+    QObject *root = NULL;
+    QList<QObject *> rootObjects = engine.rootObjects();
+    int count = rootObjects.size();
+    for(int i = 0; i < count; i ++) {
+        if(rootObjects.at(i)->objectName() == "rootObject") {
+            root = rootObjects.at(i);
+            break;
+        }
+    }
+
+    QObject *openButton = root->findChild<QObject *>("openButton");
+    if(openButton) {
+        QObject::connect(openButton, SIGNAL(clicked()), &app, SLOT(quit()));
+    }
+
+    QObject *imagePath = root->findChild<QObject *>("imagePath");
+    if(imagePath) {
+        ;
+    }
+
     return app.exec();
 }
