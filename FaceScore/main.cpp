@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
-    QObject *root = NULL;
+    QObject *root = nullptr;
     QList<QObject *> rootObjects = engine.rootObjects();
     int count = rootObjects.size();
     for(int i = 0; i < count; i ++) {
@@ -26,9 +26,10 @@ int main(int argc, char *argv[])
         }
     }
 
+    QObject *fileDialog = root->findChild<QObject *>("fileDialog");
     QObject *openButton = root->findChild<QObject *>("openButton");
-    if(openButton) {
-        QObject::connect(openButton, SIGNAL(clicked()), &app, SLOT(quit()));
+    if(fileDialog && openButton) {
+        QObject::connect(openButton, SIGNAL(clicked()), fileDialog, SLOT(open()));
     }
 
     QObject *imagePath = root->findChild<QObject *>("imagePath");

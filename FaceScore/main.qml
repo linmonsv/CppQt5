@@ -40,6 +40,7 @@ Window {
    }
 
    FileDialog {
+       objectName: "fileDialog"
        id: fileDialog;
        title: "Please choose a file";
        nameFilters: ["Image Files (*.jpg *.png)"];
