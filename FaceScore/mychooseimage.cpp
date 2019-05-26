@@ -21,5 +21,10 @@ QString MyChooseImage::getImagePath() {
         imageView->setProperty("source", "file://" + imagePath);
     }
 
+    QObject *textImagePath = m_target->findChild<QObject *>("imagePath");
+    if(textImagePath) {
+        textImagePath->setProperty("text", imagePath);
+    }
+
     return imagePath;
 };
