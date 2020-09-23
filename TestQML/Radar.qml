@@ -4,7 +4,7 @@ Rectangle
     id:root
     width: 400
     height: 400
-    property int m_Angle: 270//0
+    property int m_Angle: 270 - 15//0
     property int m_direction: 1
     Timer
     {
@@ -13,14 +13,17 @@ Rectangle
             repeat: true
             onTriggered:
             {
+                console.log("root.m_Angle : " + root.m_Angle)
                 if(m_direction)
                     root.m_Angle = root.m_Angle + 1 ;
                 else
                     root.m_Angle = root.m_Angle - 1 ;
-                if(root.m_Angle < 90 || root.m_Angle > 270)//360)
+                if(root.m_Angle < 90 || root.m_Angle > (270 - 15))//360)
                 {
                     //root.m_Angle = 90//0;
                     m_direction = !m_direction
+                    canvas_1.visible = !m_direction
+                    canvas_2.visible = m_direction
                 }
             }
     }
@@ -78,6 +81,7 @@ Rectangle
             }
         }
         Canvas{
+            id: canvas_1
             anchors.fill: parent
             rotation: root.m_Angle
             onPaint:
@@ -94,12 +98,38 @@ Rectangle
                     endDeg = startDeg + 15 - 15/ sectorCnt * i;
                     ctx.beginPath();
                     ctx.moveTo(0, 0);
-                    ctx.lineTo(0, -sectorRadius);
+                    //ctx.lineTo(0, -sectorRadius);
+                    console.log("000")
                     ctx.arc(0, 0, sectorRadius, Math.PI / 180 * (startDeg), Math.PI / 180 * endDeg);
                     ctx.closePath();
                     ctx.fill();
                 }
-                //ctx.restore();
+                ctx.restore();
+            }
+        }
+        Canvas{
+            id: canvas_2
+            anchors.fill: parent
+            rotation: root.m_Angle
+            onPaint:
+            {
+                var ctx = getContext("2d");
+                ctx.lineWidth = 2;
+                var sectorCnt = 15;
+                var startDeg = 90, endDeg;
+                var sectorRadius = width/2
+                ctx.translate(sectorRadius, sectorRadius);
+                ctx.fillStyle = 'rgba(0, 255, 0, 0.05)';
+                for(var i = 0; i < sectorCnt; i++)
+                {
+                    endDeg = startDeg + 15 - 15/ sectorCnt * i;
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.arc(0, 0, sectorRadius, Math.PI / 180 * (startDeg + sectorCnt), Math.PI / 180 * (2 * startDeg + sectorCnt - endDeg), true);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                ctx.restore();
             }
         }
     }
